@@ -1,0 +1,20 @@
+<header>
+  <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
+    <div>
+      <% if (typeof user !== 'undefined' && user) { %>
+      <strong>Utilisateur :</strong> <%= user.name %>
+      <% }
+      else { %>
+      <strong>Utilisateur :</strong> Inconnu
+      <% } %>
+    </div>
+    <div>
+      <strong>Port de plaissance
+    </div>
+    <div>
+      <a href="/dashboard">Dashboard</a> |
+      <a href="/logout">Déconnexion</a>
+    </div>
+  </div>
+  <hr>
+</header>

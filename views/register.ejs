@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Créer un compte</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <h2>Créer un compte</h2>
+
+  <form method="POST" action="/register" autocomplete="off">
+    <input type="text" name="name" placeholder="Nom" required><br>
+    <input type="email" name="email" placeholder="Email (facultatif)"><br>
+    <input type="password" name="password" placeholder="Mot de passe (min. 6 caractères)" required minlength="6"><br>
+    <small style="color: gray;">Mot de passe de 6 caractères minimum requis</small><br><br>
+    <button type="submit">S'inscrire</button>
+  </form>
+
+  <% if (message && message.length > 0) { %>
+    <p style="color:red;"><%= message %></p>
+  <% } %>
+
+  <a href="/login">Déjà un compte ? Se connecter</a>
+
+  <%- include('partials/footer') %>
+</body>
+</html>

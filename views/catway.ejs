@@ -1,0 +1,89 @@
+<!--catway.ejs-->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Détail du Catway</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<%- include('partials/header') %>
+
+<div class="container">
+  <h1 style="text-align: center;">🔍 Détail Catway</h1>
+
+  <% if (success && success.length > 0) { %>
+    <div class="alert success"><%= success[0] %></div>
+  <% } %>
+  <% if (error && error.length > 0) { %>
+    <div class="alert error"><%= error[0] %></div>
+  <% } %>
+
+  <div class="wrapper-horizontal">
+
+    <!-- 🛶 Catway -->
+    <div class="card">
+      <h2>🛶 Catway</h2>
+      <p><strong>ID Mongo :</strong> <%= catway._id %></p>
+      <p><strong>Numéro :</strong> <%= catway.catwayNumber %></p>
+      <p><strong>Type :</strong> <%= catway.type %></p>
+      <p><strong>État :</strong>
+        <% if (reservation) { %>
+          <span style="color: red;">réservé</span>
+        <% } else { %>
+          <span style="color: green;">bon état</span>
+        <% } %>
+      </p>
+    </div>
+
+    <!-- 📅 Réservation -->
+    <div class="card">
+      <h2>📅 Réservation</h2>
+      <% if (reservation) { %>
+        <p><strong>ID :</strong> <%= reservation._id %></p>
+        <p><strong>Client :</strong> <%= reservation.clientName %></p>
+        <p><strong>Bateau :</strong> <%= reservation.boatName %></p>
+        <p><strong>Début :</strong> <%= new Date(reservation.checkIn).toLocaleString() %></p>
+        <p><strong>Fin :</strong> <%= new Date(reservation.checkOut).toLocaleString() %></p>
+
+        <form action="/reservations/delete" method="POST" onsubmit="return confirm('Confirmer la suppression ?')">
+          <input type="hidden" name="reservationId" value="<%= reservation._id %>">
+          <button type="submit" class="red">❌ Annuler la réservation</button>
+        </form>
+      <% } else { %>
+        <form action="/catways/<%= catway._id %>/reservations" method="POST">
+          <input type="hidden" name="catway" value="<%= catway._id %>">
+          <div class="form-columns">
+            <div>
+              <label for="clientName">Nom du client</label>
+              <input type="text" name="clientName" id="clientName" required>
+            </div>
+            <div>
+              <label for="boatName">Nom du bateau</label>
+              <input type="text" name="boatName" id="boatName" required>
+            </div>
+            <div>
+              <label for="checkIn">Date d'arrivée</label>
+              <input type="date" name="checkIn" id="checkIn" required>
+            </div>
+            <div>
+              <label for="checkOut">Date de départ</label>
+              <input type="date" name="checkOut" id="checkOut" required>
+            </div>
+          </div>
+          <button type="submit">📅 Réserver</button>
+        </form>
+      <% } %>
+    </div>
+
+  </div>
+
+  <div style="text-align: center;">
+    <a href="/catways">⬅️ Retour à la liste</a>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
+</body>
+</html>

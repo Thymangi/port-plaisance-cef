@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Détail Réservation</title>
+  <link rel="stylesheet" href="/styles.css">
+
+</head>
+<body>
+
+<%- include('partials/header') %>
+
+<h1 style="text-align: center;">🔍 Détail d’une réservation</h1>
+
+<div class="wrapper-horizontal">
+
+    <!-- 📋 Réservation -->
+  <div class="card">
+    <h2>📋 Réservation</h2>
+    <p><strong>ID :</strong> <%= reservation._id %></p>
+    <p><strong>Client :</strong> <%= reservation.clientName %></p>
+    <p><strong>Bateau :</strong> <%= reservation.boatName %></p>
+    <p><strong>Début :</strong> <%= new Date(reservation.checkIn).toLocaleString() %></p>
+    <p><strong>Fin :</strong> <%= new Date(reservation.checkOut).toLocaleString() %></p>
+
+    <div>
+      <form action="/reservations/delete" method="POST" onsubmit="return confirm('Confirmer la suppression de cette réservation ?')">
+        <input type="hidden" name="reservationId" value="<%= reservation._id %>">
+        <button type="submit" class="red">❌ Supprimer la réservation</button>
+      </form>
+    </div>
+
+  </div>
+
+  <!-- 🛶 Catway -->
+  <div class="card">
+    <h2>🛶 Catway</h2>
+    <% if (catway) { %>
+      <p><strong>ID :</strong> <%= catway._id %></p>
+      <p><strong>Numéro :</strong> <%= catway.catwayNumber %></p>
+      <p><strong>Type :</strong> <%= catway.type %></p>
+      <p><strong>État :</strong> <%= catway.catwayState %></p>
+    <% } else { %>
+      <p><em>Pas d’information sur le catway</em></p>
+    <% } %>
+  </div>
+
+</div>
+
+<div style="text-align: center;">
+  <a href="/reservations">⬅️ Retour à la liste des réservations</a>
+</div>
+
+<%- include('partials/footer') %>
+</body>
+</html>

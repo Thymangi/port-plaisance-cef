@@ -1,0 +1,63 @@
+<!-- catways.ejs -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Catways</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<%- include('partials/header') %>
+
+<div class="container">
+  <h1>Liste des Catways</h1>
+
+    <nav>
+    <a href="/catways">📋 Liste des Catways</a> |
+    <a href="/reservations">📋 Liste des Réservations</a> |
+    <a href="/dashboard">Tableau de bord</a>
+  </nav>
+
+  <% if (Array.isArray(catways) && catways.length > 0) { %>
+    <div class="catway-grid">
+  <% catways.forEach(c => { %>
+    <%
+      const reservation = reservations.find(r =>
+      (r.catway && r.catway.toString() === c._id.toString()) ||
+      (r.catwayNumber === c.catwayNumber)
+      );
+      const isReserved = !!reservation;
+    %>
+    <div class="catway-card">
+      <h3>Catway N° <%= c.catwayNumber %></h3>
+      <% if (isReserved) { %>
+        <span style="color:red">🔴 Réservé</span>
+      <% } else { %>
+        <span style="color:green">🟢 Disponible</span>
+      <% } %>
+
+      <% if (isReserved) { %>
+        <p><strong>Client :</strong> <%= reservation.clientName %></p>
+        <p><strong>Bateau :</strong> <%= reservation.boatName %></p>
+        <p><strong>Début :</strong> <%= new Date(reservation.checkIn).toLocaleString() %></p>
+        <p><strong>Fin :</strong> <%= new Date(reservation.checkOut).toLocaleString() %></p>
+
+      <% } else { %>
+        <p><em>Aucune réservation</em></p>
+      <% } %>
+
+      <a href="/catways/<%= c._id %>">🔎 Voir le détail</a>
+      <% if (!isReserved) { %>
+        <a href="/catways/<%= c._id %>/reserver">📅 Réserver</a>
+      <% } else { %>
+        <span style="color:gray">Indisponible</span>
+      <% } %>
+    </div>
+  <% }) %>
+<% } else { %>
+  <p>Aucun catway disponible.</p>
+<% } %>
+</div>
+
+<%- include('partials/footer') %>

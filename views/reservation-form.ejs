@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Nouvelle Réservation</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <div class="wrapper-horizontal">
+    <div class="card">
+      <h2>📅 Réserver le Catway n°<%= catway.catwayNumber %></h2>
+      <form method="POST" action="/api/catways/<%= catway._id %>/reservations">
+        <label for="clientName">Nom du client</label>
+        <input type="text" name="clientName" required>
+
+        <label for="boatName">Nom du bateau</label>
+        <input type="text" name="boatName" required>
+
+        <label for="checkIn">Date d'arrivée</label>
+        <input type="date" name="checkIn" required>
+
+        <label for="checkOut">Date de départ</label>
+        <input type="date" name="checkOut" required>
+
+        <button type="submit">✅ Réserver</button>
+      </form>
+    </div>
+  </div>
+
+  <div style="text-align: center;">
+    <a href="/catways">⬅️ Retour à la liste</a>
+  </div>
+
+  <%- include('partials/footer') %>
+</body>
+</html>

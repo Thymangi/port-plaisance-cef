@@ -1,0 +1,12 @@
+<hr>
+<footer>
+  <div style="text-align: center; padding: 10px;">
+    <% if (typeof user !== 'undefined' && user) { %>
+       Utilisateur connecté : <%= user.name %> —
+    <% } else { %>
+      Utilisateur connecté : Inconnu —
+    <% } %>
+    <a href="/dashboard">Retour Dashboard</a> |
+    <a href="/logout">Déconnexion</a>
+  </div>
+</footer>

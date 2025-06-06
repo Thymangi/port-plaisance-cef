@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Accueil – Port de Plaisance Russell</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <h1>Bienvenue au Port de Plaisance Russell</h1>
+
+  <p>
+    Cette application permet à la capitainerie de gérer les catways (emplacements pour bateaux), les utilisateurs et leurs réservations.
+    Grâce à une API sécurisée et une interface intuitive, simplifiez vos opérations portuaires.
+  </p>
+
+  <h2>Connexion</h2>
+  <form method="POST" action="/login">
+    <input type="text" name="name" placeholder="Nom" required><br>
+    <input type="password" name="password" placeholder="Mot de passe" required><br>
+    <button type="submit">Se connecter</button>
+  </form>
+
+  <% if (message && message.length > 0) { %>
+    <p style="color: red;"><%= message %></p>
+  <% } %>
+
+  <p>Pas encore de compte ? <a href="/register">Créer un compte</a></p>
+
+  <p><a href="/documentation">📄 Voir la documentation de l’API</a></p>
+
+  <%- include('partials/footer') %>
+</body>
+</html>

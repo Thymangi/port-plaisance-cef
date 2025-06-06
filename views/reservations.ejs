@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Catways</title>
+  <link rel="stylesheet" href="/styles.css">
+
+</head>
+<body>
+<%- include('partials/header') %>
+
+<h1>📋 Réservations</h1>
+
+<nav>
+    <a href="/catways">📋 Liste des Catways</a> |
+    <a href="/reservations">📋 Liste des Réservations</a> |
+    <a href="/dashboard">Tableau de bord</a>
+</nav>
+
+<div style="display: flex; flex-wrap: wrap; gap: 20px; padding: 20px;">
+  <% if (reservations && reservations.length > 0) { %>
+    <% reservations.forEach(reservation => { %>
+      <div style="border: 1px solid #ccc; padding: 15px; border-radius: 8px; width: 300px; box-shadow: 0 0 5px rgba(0,0,0,0.1); background: #f9f9f9;">
+        <p><strong>Client :</strong> <%= reservation.clientName %></p>
+        <p><strong>Bateau :</strong> <%= reservation.boatName %></p>
+        <p><strong>Début :</strong> <%= new Date(reservation.checkIn).toLocaleString('fr-FR') %></p>
+        <p><strong>Fin :</strong> <%= new Date(reservation.checkOut).toLocaleString('fr-FR') %></p>
+
+        <p><strong>ID Réservation :</strong> <%= reservation._id %></p>
+
+        <p>
+          <a href="/reservations/<%= reservation._id.toString() %>">Voir les détails</a>
+        </p>
+      </div>
+    <% }) %>
+  <% } else { %>
+    <p>Aucune réservation trouvée.</p>
+  <% } %>
+</div>
+
+<%- include('partials/footer') %>

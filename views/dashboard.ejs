@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Tableau de bord</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <h1>Tableau de bord</h1>
+
+  <nav>
+    <a href="/catways">📋 Liste des Catways</a> |
+    <a href="/reservations">📋 Liste des Réservations</a> |
+    <a href="/">🏠 Retour Accueil</a>
+  </nav>
+
+  <!-- Utilisateurs -->
+  <div class="dashboard-wrapper">
+    <h2>👤 Utilisateurs</h2>
+    <div class="card-row">
+
+      <!-- Créer -->
+      <div class="dashboard-card">
+        <h3>Créer un utilisateur</h3>
+        <form method="POST" action="/auth/register">
+          <label for="name">Nom</label>
+          <input type="text" name="name" id="name" value="<%= user?.name %>">
+
+          <label for="password">Mot de passe</label>
+          <input type="password" name="password" id="password">
+
+          <label for="email">Email</label>
+          <input type="email" name="email" id="email" value="<%= user?.email || '' %>">
+
+          <button type="submit">Créer</button>
+        </form>
+      </div>
+
+      <!-- Modifier -->
+      <div class="dashboard-card">
+        <h3>Modifier un utilisateur</h3>
+        <form method="POST" action="/auth/update">
+          <label for="mod-id">ID</label>
+          <input type="text" name="id" id="mod-id" required value="<%= user?.id %>">
+
+          <label for="mod-name">Nom</label>
+          <input type="text" name="name" id="mod-name" value="<%= user?.name %>">
+
+          <label for="mod-password">Mot de passe</label>
+          <input type="password" name="password" id="mod-password">
+
+          <button type="submit">Modifier</button>
+        </form>
+      </div>
+
+      <!-- Supprimer -->
+      <div class="dashboard-card">
+        <h3>Supprimer un utilisateur</h3>
+        <form method="POST" action="/auth/delete">
+          <label for="del-id">ID</label>
+          <input type="text" name="id" id="del-id" required>
+
+          <button type="submit">Supprimer</button>
+        </form>
+      </div>
+
+    </div>
+    <hr class="section-separator">
+  </div>
+
+  <!-- Catways -->
+  <div class="dashboard-wrapper">
+    <h2>⚓ Catways</h2>
+    <div class="card-row">
+
+      <!-- Créer -->
+      <div class="dashboard-card">
+        <h3>Créer un catway</h3>
+        <form method="POST" action="/catways">
+          <label for="catwayNumber">Numéro</label>
+          <input type="text" name="catwayNumber" id="catwayNumber" required>
+
+          <label for="type">Type</label>
+          <input type="text" name="type" id="type" required>
+
+          <label for="catwayState">État</label>
+          <input type="text" name="catwayState" id="catwayState" required>
+
+          <button type="submit">Créer</button>
+        </form>
+      </div>
+
+      <!-- Modifier -->
+      <div class="dashboard-card">
+        <h3>Modifier un catway</h3>
+        <form method="POST" action="/catways/update">
+          <label for="cat-id">ID</label>
+          <input type="text" name="id" id="cat-id" required>
+
+          <label for="cat-newstate">Nouvel état</label>
+          <input type="text" name="catwayState" id="cat-newstate" required>
+
+          <button type="submit">Modifier</button>
+        </form>
+      </div>
+
+      <!-- Supprimer -->
+      <div class="dashboard-card">
+        <h3>Supprimer un catway</h3>
+        <form method="POST" action="/catways/delete">
+          <label for="cat-del-id">ID</label>
+          <input type="text" name="id" id="cat-del-id" required>
+
+          <button type="submit">Supprimer</button>
+        </form>
+      </div>
+
+    </div>
+    <hr class="section-separator">
+  </div>
+
+  <!-- Réservations -->
+  <div class="dashboard-wrapper">
+    <h2>📅 Réservations</h2>
+    <div class="card-row">
+
+      <!-- Créer réservation  -->
+      <div class="dashboard-card double">
+          <h3>Créer une réservation</h3>
+          <form method="POST" action="/reservations">
+            <div class="form-columns">
+              <div>
+                <label for="res-catway">Catway Number</label>
+                <input type="text" name="catwayNumber" id="res-catway" required>
+
+                <label for="res-client">Nom client</label>
+                <input type="text" name="clientName" id="res-client" required>
+
+                <label for="res-boat">Nom bateau</label>
+                <input type="text" name="boatName" id="res-boat" required>
+              </div>
+              <div>
+                <label for="res-checkin">Arrivée</label>
+                <input type="date" name="checkIn" id="res-checkin" required>
+
+                <label for="res-checkout">Départ</label>
+                <input type="date" name="checkOut" id="res-checkout" required>
+              </div>
+            </div>
+            <button type="submit">Réserver</button>
+          </form>
+        </div>
+
+      <!-- Supprimer réservation -->
+      <div class="dashboard-card">
+        <h3>Supprimer une réservation</h3>
+        <form method="POST" action="/catways/delete">
+          <label for="del-catway">ID Catway</label>
+          <input type="text" name="catwayId" id="del-catway" required>
+
+          <label for="del-res">ID Réservation</label>
+          <input type="text" name="reservationId" id="del-res" required>
+
+          <button type="submit">Supprimer</button>
+        </form>
+      </div>
+
+      <!-- Détail réservation -->
+      <div class="dashboard-card">
+        <h3>Détail réservation</h3>
+        <form method="GET" action="/catways/:id/reservations/:rid">
+          <label for="det-catway">ID Catway</label>
+          <input type="text" name="catwayId" id="det-catway" required>
+
+          <label for="det-res">ID Réservation</label>
+          <input type="text" name="reservationId" id="det-res" required>
+
+          <button type="submit">Afficher</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <%- include('partials/footer') %>
+</body>
+</html>
