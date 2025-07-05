@@ -5,7 +5,7 @@
       <strong>Utilisateur :</strong> <%= user.name %>
       <% }
       else { %>
-      <strong>Utilisateur :</strong> Inconnu
+      <strong>Utilisateur :</strong> <%= user?.name || 'Inconnu' %>
       <% } %>
     </div>
     <div>

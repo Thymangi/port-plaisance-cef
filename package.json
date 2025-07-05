@@ -2,12 +2,15 @@
   "name": "portplaisancecef",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha tests/**/*.test.mjs --timeout 10000",
     "import": "node scripts/importData.js",
-    "import:linked": "node scripts/importLinkedData.js"
+    "import:linked": "node scripts/importLinkedData.js",
+    "fix-passwords": "node scripts/passwords.js",
+    "set-password": "node scripts/forcedPassword.js"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +18,7 @@
   "description": "",
   "dependencies": {
     "axios": "^1.9.0",
+    "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
     "connect-flash": "^0.1.1",
     "connect-mongo": "^5.1.0",
@@ -29,8 +33,11 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "chai": "^5.2.0",
+    "chai-http": "^5.1.2",
     "jest": "^29.7.0",
+    "mocha": "^11.7.1",
     "nodemon": "^3.1.10",
-    "supertest": "^7.1.0"
+    "supertest": "^7.1.1"
   }
 }

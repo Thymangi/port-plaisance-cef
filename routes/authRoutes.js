@@ -1,12 +1,20 @@
-//authRoutes.js
-const express = require('express');
+// routes/authRoutes.js
+import express from 'express';
+import {
+  index,
+  postLogin,
+  getRegister,
+  postRegister,
+  logout
+} from '../controllers/authController.js';
+
+
 const router = express.Router();
-const { register, login } = require('../controllers/authController');
-const authController = require('../controllers/authController');
 
-// Routes publiques
-router.post('/register', register);
-router.post('/login', login);
-router.post('/update', authController.updateUser);
+router.get('/', index);
+router.post('/', postLogin);
+router.get('/register', getRegister);
+router.post('/register', postRegister);
+router.get('/logout', logout);
 
-module.exports = router;
+export default router;

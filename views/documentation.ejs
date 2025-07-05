@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Documentation API – Port Plaisance</title>
+  <link rel="stylesheet" href="/documentation.css">
+</head>
+<body>
+
+    <%- include('partials/header') %>
+
+<header>
+    <h1>📘 Documentation de l’API – Port de Plaisance</h1>
+  </header>
+
+  <main class="container">
+
+  <section>
+    <h2>🔍 Vue d’ensemble</h2>
+    <p>Bienvenue dans la documentation officielle de l’API. Cette API RESTful permet de gérer les utilisateurs, les catways (emplacements de quai) et les réservations.</p>
+    <ul>
+      <li><strong>Style :</strong> RESTful</li>
+      <li><strong>Format des données :</strong> JSON</li>
+      <li><strong>Base URL :</strong> <code>http://localhost:5000/api</code></li>
+    </ul>
+
+    <h3>📟 Codes de réponse HTTP</h3>
+    <table>
+      <thead>
+        <tr><th>Code</th><th>Signification</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>200</td><td>OK</td></tr>
+        <tr><td>201</td><td>Ressource créée</td></tr>
+        <tr><td>400</td><td>Requête invalide</td></tr>
+        <tr><td>401</td><td>Non autorisé</td></tr>
+        <tr><td>404</td><td>Non trouvé</td></tr>
+        <tr><td>500</td><td>Erreur serveur</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>📚 Tutoriel</h2>
+    <h3>1. Créer un utilisateur</h3>
+    <pre><code>POST /api/users
+Content-Type: application/json
+
+{
+  "name": "Jean Dupont",
+  "email": "jean@example.com",
+  "password": "monmotdepasse"
+}</code></pre>
+
+    <h3>2. Se connecter</h3>
+    <pre><code>POST /api/auth/login
+
+{
+  "email": "jean@example.com",
+  "password": "monmotdepasse"
+}</code></pre>
+
+    <h3>3. Réserver un catway</h3>
+    <pre><code>POST /api/catways/:catwayId/reservations
+Authorization: Bearer &lt;token&gt;
+
+{
+  "userId": "USER_ID",
+  "startDate": "2025-07-01",
+  "endDate": "2025-07-05"
+}</code></pre>
+
+    <h3>4. Supprimer une réservation</h3>
+    <pre><code>DELETE /api/reservations/:reservationId
+Authorization: Bearer &lt;token&gt;</code></pre>
+  </section>
+
+  <section>
+    <h2>🧪 Exemples d'appels API</h2>
+
+    <h3>➕ Création d’utilisateur</h3>
+    <pre><code>POST /api/users
+
+{
+  "name": "Marie Curie",
+  "email": "marie@port.com",
+  "password": "radioactif"
+}</code></pre>
+
+    <h3>➕ Réservation d’un catway</h3>
+    <pre><code>POST /api/catways/6649a23ab312c3/reservations
+Authorization: Bearer &lt;token&gt;
+
+{
+  "userId": "663cdbed17a9c4",
+  "startDate": "2025-08-01",
+  "endDate": "2025-08-10"
+}</code></pre>
+
+    <h3>🔍 Voir les détails d’une réservation</h3>
+    <pre><code>GET /api/reservations/6650a3b1cfc9e2
+Authorization: Bearer &lt;token&gt;</code></pre>
+  </section>
+
+  <section>
+    <h2>📖 Glossaire</h2>
+    <table>
+      <thead>
+        <tr><th>Terme</th><th>Définition</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Catway</td><td>Emplacement ou quai disponible dans le port</td></tr>
+        <tr><td>Réservation</td><td>Action d’occuper un catway pour une période donnée</td></tr>
+        <tr><td>JWT</td><td>Jeton d’authentification sécurisé utilisé dans les requêtes API</td></tr>
+        <tr><td>Middleware</td><td>Fonction servant à contrôler ou enrichir les requêtes entrantes</td></tr>
+        <tr><td>Token</td><td>Clé d'accès utilisée dans l'en-tête Authorization</td></tr>
+      </tbody>
+    </table>
+  </section>
+  </main>
+   <%- include('partials/footer') %>
+</body>
+</html>

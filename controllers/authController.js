@@ -1,85 +1,88 @@
-const User = require('../models/User');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+//authController.js
+import * as authService from '../services/authService.js';
 
-const generateToken = (user) => {
-  return jwt.sign({ id: user._id, name: user.name, email: user.email }, process.env.JWT_SECRET, {
-    expiresIn: '1d',
+// Page d'accueil (formulaire de connexion intégré)
+export const index = (req, res) => {
+  res.render('index', {
+    message: req.flash('error'),
+    user: req.user || null,
+    name: ''
   });
 };
 
-exports.register = async (req, res) => {
-  const { name, email, password } = req.body;
-
-  try {
-    const existing = await User.findOne({ name });
-    if (existing) {
-      return res.status(400).json({ message: 'Utilisateur déjà existant' });
-    }
-
-    const user = new User({ name, email, password });
-    await user.save();
-
-    console.log('✅ Nouvel utilisateur créé :', user);
-
-    const token = generateToken(user);
-    res.status(201).json({ token });
-  } catch (err) {
-    console.error('❌ Erreur dans register:', err.message);
-    res.status(500).json({ message: 'Erreur serveur' });
-  }
-};
-
-exports.updateUser = async (req, res) => {
-  const { id, name, password, email } = req.body;
-
-  try {
-    const user = await User.findById(id);
-    if (!user) {
-      return res.status(404).json({ message: 'Utilisateur non trouvé' });
-    }
-
-    if (name) user.name = name;
-    if (email) user.email = email;
-    if (password) user.password = await bcrypt.hash(password, 10);
-
-    await user.save();
-    console.log('✅ Utilisateur mis à jour :', user.name);
-
-    res.redirect('/dashboard');
-  } catch (err) {
-    console.error('❌ Erreur lors de la mise à jour de l’utilisateur :', err.message);
-    res.status(500).json({ message: 'Erreur serveur' });
-  }
-};
-
-exports.login = async (req, res) => {
+// POST /login
+export const postLogin = async (req, res) => {
   let { name, password } = req.body;
+  name = name.trim().toLowerCase();
 
   try {
-    name = name?.trim();
-    if (!name || !password) {
-      return res.status(400).json({ message: 'Champs manquants' });
-    }
+    const { user, token } = await authService.authenticateUser(name, password);
 
-    const user = await User.findOne({ name: new RegExp(`^${name}$`, 'i') });
-    if (!user) {
-      console.warn('❌ Utilisateur introuvable :', name);
-      return res.status(401).json({ message: 'Identifiants invalides' });
-    }
+    req.session.regenerate((err) => {
+      if (err) {
+        console.error('❌ Erreur lors de la régénération de session :', err);
+        req.flash('error', 'Erreur de session');
+        return res.redirect('/');
+      }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      console.warn('❌ Mot de passe incorrect pour :', name);
-      return res.status(401).json({ message: 'Mot de passe incorrect' });
-    }
+      req.session.token = token;
 
-    console.log('✅ Authentification réussie pour :', user.name);
+      req.session.save((err) => {
+        if (err) {
+          console.error('❌ Erreur sauvegarde session :', err);
+          req.flash('error', 'Erreur de session');
+          return res.redirect('/');
+        }
 
-    const token = generateToken(user);
-    res.status(200).json({ token });
+        req.flash('success', `Bienvenue ${user.name}`);
+        return res.redirect('/dashboard');
+      });
+    });
+
   } catch (err) {
-    console.error('💥 Erreur serveur login :', err.message);
-    res.status(500).json({ message: 'Erreur serveur' });
+    console.error("❌ Erreur login :", err.message);
+    req.flash('error', 'Identifiants invalides');
+    res.render('index', {
+      message: req.flash('error'),
+      name,
+      user: null
+    });
   }
+};
+
+// Formulaire d'inscription
+export const getRegister = (req, res) => {
+  res.render('register', {
+    message: req.flash('error'),
+    success: req.flash('success'),
+    name: '',
+    email: '',
+    user: null
+  });
+};
+
+// Traitement de l’inscription
+export const postRegister = async (req, res) => {
+  let { name, email, password } = req.body;
+  name = name.trim().toLowerCase();
+
+  try {
+    await authService.register({ name, email, password });
+    req.flash('success', 'Compte créé. Connectez-vous.');
+    res.redirect('/');
+  } catch (err) {
+    req.flash('error', err.message);
+    res.render('register', {
+      message: req.flash('error'),
+      success: [],
+      name,
+      email,
+      user: null
+    });
+  }
+};
+
+// Déconnexion
+export const logout = (req, res) => {
+  req.session.destroy(() => res.redirect('/'));
 };

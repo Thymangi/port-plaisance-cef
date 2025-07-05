@@ -1,16 +1,14 @@
-// 📁 routes/api/apiCatwayRoutes.js
+// routes/api/apiCatwayRoutes.js
 
-const express = require('express');
+import express from 'express';
+import * as apiCatwayController from '../../controllers/api/apiControllerCatway.js';
+
 const router = express.Router();
-const isAuthenticated = require('../../middleware/auth');
-const catwayApiController = require('../../controllers/api/apiControllerCatway');
 
-router.get('/', isAuthenticated, catwayApiController.getAllCatways);
-router.get('/:id', isAuthenticated, catwayApiController.getCatwayById);
-router.post('/', isAuthenticated, catwayApiController.createCatway);
-router.put('/:id', isAuthenticated, catwayApiController.updateCatway);
-router.delete('/:id', isAuthenticated, catwayApiController.deleteCatway);
+router.get('/', apiCatwayController.list);
+router.get('/:id', apiCatwayController.detail);
+router.post('/', apiCatwayController.create);
+router.put('/:id', apiCatwayController.update);
+router.delete('/:id', apiCatwayController.remove);
 
-router.post('/:id/reservations', isAuthenticated, catwayApiController.createReservationForCatway);
-
-module.exports = router;
+export default router;

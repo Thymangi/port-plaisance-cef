@@ -1,10 +1,14 @@
 //models/reservation.js
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const reservationSchema = new mongoose.Schema({
   catway: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Catway',
+    required: true
+  },
+  catwayNumber: {
+    type: Number,
     required: true
   },
   clientName: {
@@ -25,4 +29,8 @@ const reservationSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-module.exports = mongoose.models.Reservation || mongoose.model('Reservation', reservationSchema);
+// création du modèle ou récupération du modèle existant
+const Reservation = mongoose.models.Reservation || mongoose.model('Reservation', reservationSchema);
+
+// export en ESM
+export default Reservation;

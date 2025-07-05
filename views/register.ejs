@@ -1,3 +1,5 @@
+<!-- regiter.ejs -->
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -10,19 +12,42 @@
 
   <h2>Créer un compte</h2>
 
+  <% if (message && message.length > 0) { %>
+    <p style="color:red;"><%= message %></p>
+  <% } else if (success && success.length > 0) { %>
+    <p style="color:green;"><%= success %></p>
+  <% } %>
+
   <form method="POST" action="/register" autocomplete="off">
-    <input type="text" name="name" placeholder="Nom" required><br>
-    <input type="email" name="email" placeholder="Email (facultatif)"><br>
-    <input type="password" name="password" placeholder="Mot de passe (min. 6 caractères)" required minlength="6"><br>
+    <input
+      type="text"
+      name="name"
+      placeholder="Nom"
+      required
+      value="<%= typeof name !== 'undefined' ? name : '' %>"
+    ><br>
+
+    <input
+      type="email"
+      name="email"
+      placeholder="Email (facultatif)"
+      value="<%= typeof email !== 'undefined' ? email : '' %>"
+    ><br>
+
+    <input
+      type="password"
+      name="password"
+      placeholder="Mot de passe (min. 6 caractères)"
+      required
+      minlength="6"
+    ><br>
+
     <small style="color: gray;">Mot de passe de 6 caractères minimum requis</small><br><br>
+
     <button type="submit">S'inscrire</button>
   </form>
 
-  <% if (message && message.length > 0) { %>
-    <p style="color:red;"><%= message %></p>
-  <% } %>
-
-  <a href="/login">Déjà un compte ? Se connecter</a>
+  <p><a href="/">Déjà un compte ? Se connecter</a></p>
 
   <%- include('partials/footer') %>
 </body>

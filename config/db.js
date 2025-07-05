@@ -1,25 +1,24 @@
-const mongoose = require('mongoose');
-require('dotenv').config();
+// config/db.js
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+let isConnected = false;
 
 const connectDB = async () => {
+  if (isConnected) return; // évite les doubles connexions pendant les tests
+
   try {
     const uri = process.env.MONGO_URI;
+    if (!uri) throw new Error('MONGO_URI est manquant dans .env');
 
-    if (!uri) {
-      throw new Error("❌ MONGO_URI est manquant dans le fichier .env");
-    }
-
-    // Connexion MongoDB avec base de données explicitement définie
-    await mongoose.connect(uri, {
-      dbName: 'port_plaisance',
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(uri, { dbName: 'port_plaisance' });
 
     const db = mongoose.connection;
-
     db.on('connected', () => {
       console.log('✅ Connexion MongoDB réussie à :', db.name);
+      isConnected = true;
     });
 
     db.on('error', (err) => {
@@ -27,9 +26,17 @@ const connectDB = async () => {
     });
 
   } catch (error) {
-    console.error('💥 Échec de la connexion à MongoDB :', error.message);
+    console.error('❌ Échec de la connexion MongoDB :', error.message);
     process.exit(1);
   }
 };
 
-module.exports = connectDB;
+const closeDB = async () => {
+  if (mongoose.connection.readyState !== 0) {
+    await mongoose.disconnect();
+    console.log('📴 Connexion MongoDB fermée');
+    isConnected = false;
+  }
+};
+
+export { connectDB, closeDB };

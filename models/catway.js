@@ -1,5 +1,5 @@
 //models/catwaynpm .js
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const catwaySchema = new mongoose.Schema({
   catwayNumber: {
@@ -18,4 +18,8 @@ const catwaySchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-module.exports = mongoose.models.Catway || mongoose.model('Catway', catwaySchema);
+// création du modèle
+const Catway = mongoose.models.Catway || mongoose.model('Catway', catwaySchema);
+
+// pour ESM
+export default Catway;
